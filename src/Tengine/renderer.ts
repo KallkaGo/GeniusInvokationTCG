@@ -24,6 +24,7 @@ export default class Render {
     this.instance.outputEncoding = sRGBEncoding
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
+    this.instance.setClearColor(0xb9d3ff, 1)
     this.instance.setSize(this.sizes!.width, this.sizes!.height)
     this.instance.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
