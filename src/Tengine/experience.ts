@@ -18,10 +18,10 @@ export default class Experience {
   public scene!: Scene;
   public control!: any;
   public render;
-  public world;
+  public world?: any;
   public ambient!: Light;
   public spotLight!: Light;
-  public resource;
+  public resource?: any;
   constructor(canvas?: HTMLCanvasElement) {
 
     /*  
@@ -53,6 +53,10 @@ export default class Experience {
     // Time tick event
     this.time.on('tick', () => {
       this.update()
+      if (this.world.physicalWorld) {
+        this.world.physicalWorld.updated()
+      }
+
     })
   }
   setLight() {
@@ -60,8 +64,8 @@ export default class Experience {
     this.spotLight = new SpotLight(0xffffff)
     this.spotLight.position.set(20, 220, 100)
     this.spotLight.castShadow = true
-    this.spotLight.shadow.mapSize.width = 1024
-    this.spotLight.shadow.mapSize.height = 1024
+    this.spotLight.shadow.mapSize.width = 512
+    this.spotLight.shadow.mapSize.height = 512
     this.scene.add(this.ambient)
     this.scene.add(this.spotLight)
   }

@@ -5,7 +5,7 @@ export default class Floor {
   public material!: Material;
   public mesh!: Mesh;
   constructor() {
-    this.geometry = new BoxGeometry(150, 150, 5)
+    this.geometry = new BoxGeometry(20, 20)
     this.material = new MeshPhongMaterial({
       color: 0x845EC2,
     })

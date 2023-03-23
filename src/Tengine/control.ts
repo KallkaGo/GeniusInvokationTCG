@@ -15,6 +15,7 @@ export default class Control {
   setOrbitControls(){
     this.instance = new OrbitControls(this.camera.instance,this.canvas)
     this.instance.enableDamping = true
+    // this.instance.autoRotate =true
   }
   updated() {
       this.instance.update()
