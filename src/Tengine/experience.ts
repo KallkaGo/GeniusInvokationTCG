@@ -1,4 +1,4 @@
-import { Scene, AmbientLight, Light, SpotLight } from 'three'
+import { Scene, AmbientLight, Light, SpotLight, Vector3 } from 'three'
 import Sizes from './sizes'
 import Time from './time'
 import Camera from './camera';
@@ -54,7 +54,7 @@ export default class Experience {
     this.time.on('tick', () => {
       this.update()
       if (this.world.physicalWorld) {
-        this.world.physicalWorld.updated()
+        this.world.physicalWorld.update()
       }
 
     })
@@ -62,10 +62,10 @@ export default class Experience {
   setLight() {
     this.ambient = new AmbientLight(0x666666)
     this.spotLight = new SpotLight(0xffffff)
-    this.spotLight.position.set(20, 220, 100)
+    this.spotLight.position.set(20, 200, 50)
     this.spotLight.castShadow = true
-    this.spotLight.shadow.mapSize.width = 512
-    this.spotLight.shadow.mapSize.height = 512
+    this.spotLight.shadow.mapSize.width = 2048
+    this.spotLight.shadow.mapSize.height = 2048
     this.scene.add(this.ambient)
     this.scene.add(this.spotLight)
   }

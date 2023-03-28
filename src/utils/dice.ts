@@ -10,7 +10,7 @@ export default function createDice() {
     [166, 228, 241],
     [255, 255, 255],
   ];
-  const color_arr: any[] = [];
+  const color_arr:any[] = [];
   rgb_arr.map((val_arr) => {
     for (let i = 0; i < 3; i++) {
       val_arr.map((val) => {
@@ -18,14 +18,15 @@ export default function createDice() {
       });
     }
   });
+  const geometry = new THREE.OctahedronGeometry(1)
   const color = new Float32Array(color_arr);
-  const geometry = new THREE.OctahedronGeometry()
   geometry.attributes.color = new THREE.BufferAttribute(color, 3);
   const material = new THREE.MeshLambertMaterial({
-    vertexColors: true,
+    vertexColors: true, 
     side: THREE.DoubleSide,
   });
   const polyhedron_mesh = new THREE.Mesh(geometry, material);
+
   return polyhedron_mesh
 }
 

@@ -1,6 +1,6 @@
 import Experience from "@/Tengine/experience";
-import { SphereGeometry, ShaderMaterial, Mesh, Vector2, IcosahedronGeometry, DoubleSide, Vector3, PlaneGeometry } from 'three'
-import createDice from '@/utils/dice'
+import { SphereGeometry, ShaderMaterial, Mesh, Vector2, IcosahedronGeometry, DoubleSide, Vector3, PlaneGeometry, BoxGeometry, MeshStandardMaterial } from 'three'
+
 import Floor from "../components/floor";
 import PhyWorld from './phyworld'
 import vertexShader from './shader/vertex.glsl'
@@ -14,7 +14,7 @@ export default class World {
   public experience;
   public scene;
   public floor: any;
-  public physicalWorld: any;
+  public physicalWorld!: PhyWorld;
   public resource;
   public effectComposer!: EffectComposer;
   public mesh: any;
@@ -26,23 +26,27 @@ export default class World {
 
 
 
-
     /* 
   资源文件加载完毕 渲染场景
     */
     this.resource?.on('ready', () => {
-
-      const dice = createDice()
-      dice.castShadow =true
-      dice.position.set(2, 10, 0)
-      this.scene.add(dice)
       this.floor = new Floor()
       this.scene.add(this.floor.mesh)
-      this.physicalWorld = new PhyWorld(dice)
-
+      this.physicalWorld = new PhyWorld()
+      this.createModel(10, 8)
     })
 
   }
 
+  createModel(height: number, count: number) {
+    for (let i = 0; i < count; i++) {
+      const x = (Math.random() - 0.5) * 10 + 0.5
+      const y = height
+      const z = (Math.random() - 0.5) * 10 + 0.5
+      const position = new Vector3(x, y, z)
+      // this.physicalWorld.createBox(position)
+      this.physicalWorld.createDice(position)
+    }
+  }
 
 }
