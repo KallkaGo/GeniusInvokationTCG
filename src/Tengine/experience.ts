@@ -58,6 +58,8 @@ export default class Experience {
       }
 
     })
+
+
   }
   setLight() {
     this.ambient = new AmbientLight(0x666666)

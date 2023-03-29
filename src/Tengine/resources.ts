@@ -27,25 +27,27 @@ export default class Resource extends EventEmitter {
     this.loaders.audioLoader = new AudioLoader()
   }
   startLoading() {
-    console.log(this.sources);
-    for (const item of this.sources) {
-      if (item.type === 'gltfModel') {
-        this.loaders.gltfLoader.load(item.path, (file: any) => {
-          this.sourceLoaded(item, file)
-        })
-      } else if (item.type === 'hdrTexture') {
-        this.loaders.rgbeLoader.loadAsync(item.path).then((file: any) => {
-          this.sourceLoaded(item, file)
-        })
-      } else if (item.type === 'texture') {
-        this.loaders.textureLoader.load(item.path, (file: any) => {
-          this.sourceLoaded(item, file)
-        })
-      } else if (item.type === 'audio') {
-        this.loaders.audioLoader.load(item.path, (file: any) => {
-          this.sourceLoaded(item, file)
-        })
+    const loader:any={
+      'gltfModel':this.loaders.gltfLoader,
+      'hdrTexture':this.loaders.rgbeLoader,
+      'texture':this.loaders.textureLoader,
+      'audio':this.loaders.audioLoader
+
+    }
+    const loadManager =(type:string,item:any)=>{
+      return loader[type].load(item.path, (file: any) => {
+        this.sourceLoaded(item, file)
+      })
+    }
+    if (this.sources.length > 0) {
+      for (const item of this.sources) {
+        loadManager(item.type,item)
       }
+    } else {
+      setTimeout(() => {
+        this.trigger('ready', null)
+      }, 0)
+
     }
   }
   sourceLoaded(source: any, file: any) {
