@@ -7,6 +7,7 @@ import Render from './renderer';
 import World from '@/World/world';
 import Resource from './resources';
 import resourceList from './resourceList';
+import Debug from '@/utils/debug';
 
 let instance: any = null
 
@@ -22,6 +23,7 @@ export default class Experience {
   public ambient!: Light;
   public spotLight!: Light;
   public resource?: any;
+  public debug;
   constructor(canvas?: HTMLCanvasElement) {
 
     /*  
@@ -34,6 +36,7 @@ export default class Experience {
     window.experience = this
     instance = this
     this.canvas = canvas
+    this.debug = new Debug()
     this.sizes = new Sizes()
     this.time = new Time()
     this.scene = new Scene()
@@ -63,8 +66,8 @@ export default class Experience {
   }
   setLight() {
     this.ambient = new AmbientLight(0x666666)
-    this.spotLight = new SpotLight(0xffffff)
-    this.spotLight.position.set(20, 200, 50)
+    this.spotLight = new SpotLight(0xffffff,0.5,5000)
+    this.spotLight.position.set(20, 200, 0)
     this.spotLight.castShadow = true
     this.spotLight.shadow.mapSize.width = 2048
     this.spotLight.shadow.mapSize.height = 2048

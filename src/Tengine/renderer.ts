@@ -1,4 +1,4 @@
-import { WebGLRenderer, CineonToneMapping, sRGBEncoding, PCFSoftShadowMap } from 'three'
+import { WebGLRenderer, CineonToneMapping, sRGBEncoding, PCFSoftShadowMap,LinearToneMapping } from 'three'
 import Experience from './experience';
 export default class Render {
   public instance!: WebGLRenderer;
@@ -20,7 +20,7 @@ export default class Render {
       canvas: this.canvas,
       antialias: true
     })
-    this.instance.toneMapping = CineonToneMapping
+    this.instance.toneMapping = LinearToneMapping
     this.instance.outputEncoding = sRGBEncoding
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap

@@ -3,19 +3,56 @@ import *  as THREE from 'three'
 import Experience from '@/Tengine/experience';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import createDice from '@/utils/dice'
+import setOctahedron from '@/utils/setOctahedron'
+
 
 
 export default class PhysicalWorld {
   private world: CANNON.World;
   public experience;
   public objectsToUpdate: any[];
+  public debug;
+  public debugFolder;
+  public debugObject;
+
   constructor() {
     this.world = new CANNON.World()
     this.world.gravity.set(0, -9.82, 0)
     this.world.allowSleep = true
     this.experience = new Experience()
     this.objectsToUpdate = []
+    this.debug = this.experience.debug
+    this.createPhyFloor()
 
+
+    if (this.debug?.active) {
+      this.debugFolder = this.debug.ui?.addFolder('Dice')
+      this.debugObject = {
+        emissive: '#FFFFFF',
+        color: '#FFFFFF',
+        emissiveIntensity:0.3
+      }
+      this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value) => { this.setProperty(this.experience.scene.children,"emissive",value) })
+      this.debugFolder?.addColor(this.debugObject, 'color').onChange((value) => {this.setProperty(this.experience.scene.children,"color",value) })
+      this.debugFolder?.add(this.debugObject,'emissiveIntensity').min(0).max(5).step(0.01).onChange((value)=>{this.setProperty(this.experience.scene.children,"emissiveIntensity",value) })
+    }
+
+
+
+
+  }
+  setProperty(target: any[], arg: string,value:string) {
+    for (const item of target) {
+      if (item.type === 'Mesh' && Array.isArray(item.material)) {
+        item.material.forEach((element:any) => {
+          element[arg] = value
+        });
+      }
+    }
+  }
+
+
+  createPhyFloor() {
     /* Material */
     const defaultMaterial = new CANNON.Material('default')
 
@@ -42,7 +79,6 @@ export default class PhysicalWorld {
     floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5)
 
     this.world.addBody(floorBody)
-  
 
   }
 
@@ -70,26 +106,102 @@ export default class PhysicalWorld {
 
   createDice(position: any) {
     //threejs
-    const mesh = createDice()
-    mesh.position.set(position.x,position.y,position.z)
+    // const mesh = createDice()
+    // mesh.position.set(position.x, position.y, position.z)
+    const geometry = createDice()
+    setOctahedron(geometry)
+    const faceTex = [
+      {
+        element: "primogem",
+        color: "#38383c",
+      },
+      {
+        element: "anemo",
+        color: "#54b6a5",
+      },
+      {
+        element: "geo",
+        color: "#3c2d22",
+      },
+      {
+        element: "electro",
+        color: "#522552",
+      },
+      {
+        element: "dendro",
+        color: "#5fcc66",
+      },
+      {
+        element: "hydro",
+        color: "#24236c",
+      },
+      {
+        element: "pyro",
+        color: "#8f3e43",
+      },
+      {
+        element: "cryo",
+        color: "#95dae4",
+      }
+    ]
+    // const materials = [
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.pyroTex, color: '#c81a1a' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.anemoTex, color: '#095f44' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.cryoTex, color: '#1fbbbb' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.electroTex, color: '#871b87' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.geoTex, color: '#3f2205' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.dendroTex, color: '#118111' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.hydroTex, color: '#1818c9' }),
+    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.primogemTex, color: '#111111' })
+    // ]
+
+    const materials = faceTex.map((item) => {
+      const texture = this.experience.resource.items[`${item.element}Tex`]
+      const textureB = this.experience.resource.items[`${item.element}TexB`]
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.NearestFilter;
+      texture.center.set(0.5, 0.5)
+      texture.repeat.set(2, 2)
+      textureB.magFilter = THREE.NearestFilter;
+      textureB.minFilter = THREE.NearestFilter;
+      textureB.center.set(0.5, 0.5)
+      textureB.repeat.set(3, 3)
+      return new THREE.MeshLambertMaterial(
+        {
+          map: textureB,
+          side: THREE.DoubleSide,
+          emissive: this.debugObject?.emissive,
+          color: this.debugObject?.color,
+          emissiveIntensity: 0.3,
+          emissiveMap: texture
+        })
+
+    })
+    //   const material = new THREE.MeshBasicMaterial({
+    //   vertexColors: true, 
+    //   side: THREE.DoubleSide,
+    // });
+    const mesh = new THREE.Mesh(geometry, materials)
     mesh.castShadow = true
+    mesh.position.set(position.x, position.y, position.z)
+    this.experience.scene.add(mesh)
     //cannon
     const dice = this.setPhyDice(mesh)
     const body = new CANNON.Body({
-      mass: 1,
+      mass: 10,
       shape: dice,
     })
-    
+
     body.position.copy(position)
     body.angularVelocity.set(Math.random(), Math.random(), Math.random());
     body.velocity.set(0, -8, 0);
-    this.experience.scene.add(mesh)
+
     this.world.addBody(body)
     this.objectsToUpdate.push({ mesh, body })
   }
 
-  
-  setPhyDice(mesh:any) {
+
+  setPhyDice(mesh: any) {
     let geometry: any = new THREE.BufferGeometry()
     geometry.setAttribute('position', mesh.geometry.getAttribute('position'))
     geometry = mergeVertices(geometry)

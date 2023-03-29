@@ -18,12 +18,13 @@ export default class World {
   public resource;
   public effectComposer!: EffectComposer;
   public mesh: any;
-
+  
+ 
   constructor() {
     this.experience = new Experience()
     this.scene = this.experience.scene
     this.resource = this.experience.resource
-
+   
 
 
     /* 

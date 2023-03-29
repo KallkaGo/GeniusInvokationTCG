@@ -6,6 +6,14 @@ import hydroTex from "@/components/dice/assets/hydro.png";
 import pyroTex from "@/components/dice/assets/pyro.png";
 import cryoTex from "@/components/dice/assets/cryo.png";
 import primogemTex from "@/components/dice/assets/primogem.png";
+import anemoTexB from "@/components/dice/assets/feng.png";
+import geoTexB from "@/components/dice/assets/yan.png";
+import electroTexB from "@/components/dice/assets/lei.png";
+import dendroTexB from "@/components/dice/assets/cao.png";
+import hydroTexB from "@/components/dice/assets/shui.png";
+import pyroTexB from "@/components/dice/assets/huo.png";
+import cryoTexB from "@/components/dice/assets/bing.png";
+import primogemTexB from "@/components/dice/assets/yuanshi.png";
 import diceRollSE from "@/components/dice/assets/dice-roll.mp3";
 import diceLightenSE from "@/components/dice/assets/dice-lighten.mp3";
 
@@ -66,6 +74,46 @@ const resourceList: resourceItem[] = [
     name: "primogemTex",
     type: "texture",
     path: primogemTex
+  },
+  {
+    name: "anemoTexB",
+    type: "texture",
+    path: anemoTexB
+  },
+  {
+    name: "geoTexB",
+    type: "texture",
+    path: geoTexB
+  },
+  {
+    name: "electroTexB",
+    type: "texture",
+    path: electroTexB
+  },
+  {
+    name: "dendroTexB",
+    type: "texture",
+    path: dendroTexB
+  },
+  {
+    name: "hydroTexB",
+    type: "texture",
+    path: hydroTexB
+  },
+  {
+    name: "pyroTexB",
+    type: "texture",
+    path: pyroTexB
+  },
+  {
+    name: "cryoTexB",
+    type: "texture",
+    path: cryoTexB
+  },
+  {
+    name: "primogemTexB",
+    type: "texture",
+    path: primogemTexB
   },
   {
     name: "diceRollSE",

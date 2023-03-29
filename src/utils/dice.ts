@@ -21,12 +21,12 @@ export default function createDice() {
   const geometry = new THREE.OctahedronGeometry(1)
   const color = new Float32Array(color_arr);
   geometry.attributes.color = new THREE.BufferAttribute(color, 3);
-  const material = new THREE.MeshLambertMaterial({
-    vertexColors: true, 
-    side: THREE.DoubleSide,
-  });
-  const polyhedron_mesh = new THREE.Mesh(geometry, material);
+  // const material = new THREE.MeshBasicMaterial({
+  //   // vertexColors: true, 
+  //   side: THREE.DoubleSide,
+  // });
+  // const polyhedron_mesh = new THREE.Mesh(geometry, material);
 
-  return polyhedron_mesh
+  return geometry
 }
 
