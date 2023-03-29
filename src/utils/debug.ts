@@ -5,9 +5,10 @@ export default class Debug{
   public active;
   constructor(){
     this.active = window.location.hash === '#debug'
-    if(this.active){
-      this.ui = new dat.GUI()
-    }
+    // if(this.active){
+    //   this.ui = new dat.GUI()
+    // }
+    this.ui = new dat.GUI({width:300})
     
   }
 }

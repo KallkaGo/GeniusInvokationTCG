@@ -23,29 +23,23 @@ export default class PhysicalWorld {
     this.objectsToUpdate = []
     this.debug = this.experience.debug
     this.createPhyFloor()
-
-
-    if (this.debug?.active) {
-      this.debugFolder = this.debug.ui?.addFolder('Dice')
-      this.debugObject = {
-        emissive: '#FFFFFF',
-        color: '#FFFFFF',
-        emissiveIntensity:0.3
-      }
-      this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value) => { this.setProperty(this.experience.scene.children,"emissive",value) })
-      this.debugFolder?.addColor(this.debugObject, 'color').onChange((value) => {this.setProperty(this.experience.scene.children,"color",value) })
-      this.debugFolder?.add(this.debugObject,'emissiveIntensity').min(0).max(5).step(0.01).onChange((value)=>{this.setProperty(this.experience.scene.children,"emissiveIntensity",value) })
+    this.debugFolder = this.debug!.ui!.addFolder('Dice')
+    this.debugObject = {
+      emissive: '#FFFFFF',
+      color: '#FFFFFF',
+      emissiveIntensity: 0.3
     }
-
-
-
+    this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value) => { this.setProperty(this.experience.scene.children, "emissive", value) })
+    this.debugFolder?.addColor(this.debugObject, 'color').onChange((value) => { this.setProperty(this.experience.scene.children, "color", value) })
+    this.debugFolder?.add(this.debugObject, 'emissiveIntensity').min(0).max(5).step(0.01).onChange((value) => { this.setProperty(this.experience.scene.children, "emissiveIntensity", value) })
 
   }
-  setProperty(target: any[], arg: string,value:string) {
+  setProperty(target: any[], arg: string, value: string) {
     for (const item of target) {
       if (item.type === 'Mesh' && Array.isArray(item.material)) {
-        item.material.forEach((element:any) => {
-          element[arg] = value
+        item.material.forEach((element: any) => {
+          const val = typeof value === 'number'? value : new THREE.Color(value)
+          element[arg] = val
         });
       }
     }
