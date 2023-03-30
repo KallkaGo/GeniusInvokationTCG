@@ -1,5 +1,5 @@
 import Experience from "@/Tengine/experience";
-import { SphereGeometry, ShaderMaterial, Mesh, Vector2, IcosahedronGeometry, DoubleSide, Vector3, PlaneGeometry, BoxGeometry, MeshStandardMaterial } from 'three'
+import { AudioListener, Vector3, Audio } from 'three'
 
 import Floor from "../components/floor";
 import PhyWorld from './phyworld'
@@ -18,36 +18,60 @@ export default class World {
   public resource;
   public effectComposer!: EffectComposer;
   public mesh: any;
-  
- 
+  public throwaudio:any;
+  public diceaudio:any;
+  public throwsound:any;
+  public dicesound:any;
+
+
+
   constructor() {
     this.experience = new Experience()
     this.scene = this.experience.scene
     this.resource = this.experience.resource
-   
+
 
 
     /* 
   资源文件加载完毕 渲染场景
     */
     this.resource?.on('ready', () => {
+      console.log('加载完成');
       this.floor = new Floor()
       this.scene.add(this.floor.mesh)
       this.physicalWorld = new PhyWorld()
-      this.createModel(10, 8)
+      this.throwaudio = new AudioListener()
+      this.diceaudio = new AudioListener()
+      this.throwsound = new Audio(this.throwaudio)
+      this.dicesound = new Audio(this.diceaudio)
+      this.dicesound.setBuffer( this.resource.items['diceLightenSE'])
+      this.throwsound.setBuffer( this.resource.items['diceRollSE'])
+      this.dicesound.setLoop(false)
     })
 
   }
 
   createModel(height: number, count: number) {
-    for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * 10 + 0.5
-      const y = height
-      const z = (Math.random() - 0.5) * 10 + 0.5
-      const position = new Vector3(x, y, z)
-      // this.physicalWorld.createBox(position)
-      this.physicalWorld.createDice(position)
-    }
-  }
+    for(const item of this.physicalWorld.objectsToUpdate){
+     item.body.removeEventListener('collide',this.physicalWorld.playHitSound)
+     //Remove Body
+     this.physicalWorld.world.removeBody(item.body)
 
+     //Remove Mesh
+     this.scene.remove(item.mesh)
+    }
+    for (let i = 0; i < count; i++) {
+      let tmp = new Vector3(-5, height, 0)
+      const x = tmp.x+Math.random()*10 + 1
+      const y = height
+      const z = tmp.z+Math.random()* 10 + 0.5
+      const position = new Vector3(x, y, z)
+      this.physicalWorld.createDice(position)
+      tmp =new Vector3(x, y, z)
+    }
+    if(!this.throwsound.isPlaying){
+      this.throwsound.play()
+    }
+  } 
+    
 }

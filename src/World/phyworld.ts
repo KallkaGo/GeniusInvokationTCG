@@ -8,12 +8,13 @@ import setOctahedron from '@/utils/setOctahedron'
 
 
 export default class PhysicalWorld {
-  private world: CANNON.World;
+  public world: CANNON.World;
   public experience;
   public objectsToUpdate: any[];
   public debug;
   public debugFolder;
-  public debugObject;
+  public debugObject: any;
+  
 
   constructor() {
     this.world = new CANNON.World()
@@ -22,23 +23,25 @@ export default class PhysicalWorld {
     this.experience = new Experience()
     this.objectsToUpdate = []
     this.debug = this.experience.debug
+    
     this.createPhyFloor()
     this.debugFolder = this.debug!.ui!.addFolder('Dice')
     this.debugObject = {
       emissive: '#FFFFFF',
       color: '#FFFFFF',
-      emissiveIntensity: 0.3
+      emissiveIntensity: 0.3,
+      throwDice: () => this.experience.world.createModel(15, 8)
     }
     this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value) => { this.setProperty(this.experience.scene.children, "emissive", value) })
     this.debugFolder?.addColor(this.debugObject, 'color').onChange((value) => { this.setProperty(this.experience.scene.children, "color", value) })
     this.debugFolder?.add(this.debugObject, 'emissiveIntensity').min(0).max(5).step(0.01).onChange((value) => { this.setProperty(this.experience.scene.children, "emissiveIntensity", value) })
-
+    this.debugFolder?.add(this.debugObject, 'throwDice')
   }
   setProperty(target: any[], arg: string, value: string) {
     for (const item of target) {
       if (item.type === 'Mesh' && Array.isArray(item.material)) {
         item.material.forEach((element: any) => {
-          const val = typeof value === 'number'? value : new THREE.Color(value)
+          const val = typeof value === 'number' ? value : new THREE.Color(value)
           element[arg] = val
         });
       }
@@ -176,6 +179,7 @@ export default class PhysicalWorld {
     //   side: THREE.DoubleSide,
     // });
     const mesh = new THREE.Mesh(geometry, materials)
+    mesh.name = 'dice'
     mesh.castShadow = true
     mesh.position.set(position.x, position.y, position.z)
     this.experience.scene.add(mesh)
@@ -189,7 +193,7 @@ export default class PhysicalWorld {
     body.position.copy(position)
     body.angularVelocity.set(Math.random(), Math.random(), Math.random());
     body.velocity.set(0, -8, 0);
-
+    body.addEventListener('collide', (value: any) => { this.playHitSound(value) })
     this.world.addBody(body)
     this.objectsToUpdate.push({ mesh, body })
   }
@@ -216,6 +220,17 @@ export default class PhysicalWorld {
     }
     return new CANNON.ConvexPolyhedron({ vertices, faces })
   }
+
+  playHitSound(collision: any) {
+    const strength = collision.contact.getImpactVelocityAlongNormal()
+    if (strength > 6 &&  !this.experience.world.dicesound.isPlaying  ) {
+       
+      
+       this.experience.world.dicesound.play()
+    }
+  }
+
+
   update() {
     this.world.step(1 / 60, 16, 3)
     for (const object of this.objectsToUpdate) {
