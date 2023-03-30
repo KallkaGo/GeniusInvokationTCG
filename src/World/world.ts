@@ -18,10 +18,10 @@ export default class World {
   public resource;
   public effectComposer!: EffectComposer;
   public mesh: any;
-  public throwaudio:any;
-  public diceaudio:any;
-  public throwsound:any;
-  public dicesound:any;
+  public throwaudio: any;
+  public diceaudio: any;
+  public throwsound: any;
+  public dicesound: any;
 
 
 
@@ -44,34 +44,35 @@ export default class World {
       this.diceaudio = new AudioListener()
       this.throwsound = new Audio(this.throwaudio)
       this.dicesound = new Audio(this.diceaudio)
-      this.dicesound.setBuffer( this.resource.items['diceLightenSE'])
-      this.throwsound.setBuffer( this.resource.items['diceRollSE'])
+      this.dicesound.setBuffer(this.resource.items['diceLightenSE'])
+      this.throwsound.setBuffer(this.resource.items['diceRollSE'])
       this.dicesound.setLoop(false)
     })
 
   }
 
   createModel(height: number, count: number) {
-    for(const item of this.physicalWorld.objectsToUpdate){
-     item.body.removeEventListener('collide',this.physicalWorld.playHitSound)
-     //Remove Body
-     this.physicalWorld.world.removeBody(item.body)
+    for (const item of this.physicalWorld.objectsToUpdate) {
+      item.body.removeEventListener('collide', this.physicalWorld.playHitSound)
+      //Remove Body
+      this.physicalWorld.world.removeBody(item.body)
 
-     //Remove Mesh
-     this.scene.remove(item.mesh)
+      //Remove Mesh
+      this.scene.remove(item.mesh)
     }
+    this.physicalWorld.objectsToUpdate = []
     for (let i = 0; i < count; i++) {
       let tmp = new Vector3(-5, height, 0)
-      const x = tmp.x+Math.random()*10 + 1
+      const x = tmp.x + Math.random() * 10 + 1
       const y = height
-      const z = tmp.z+Math.random()* 10 + 0.5
+      const z = tmp.z + Math.random() * 10 + 0.5
       const position = new Vector3(x, y, z)
       this.physicalWorld.createDice(position)
-      tmp =new Vector3(x, y, z)
+      tmp = new Vector3(x, y, z)
     }
-    if(!this.throwsound.isPlaying){
+    if (!this.throwsound.isPlaying) {
       this.throwsound.play()
     }
-  } 
-    
+  }
+
 }
