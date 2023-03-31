@@ -12,7 +12,6 @@
     "cannon-es": "^0.20.0",
     "dat.gui": "^0.7.9",
     "three": "^0.151.2",
-    "vercel": "^28.18.3",
     "vue": "^3.2.47"
   },
   "devDependencies": {
