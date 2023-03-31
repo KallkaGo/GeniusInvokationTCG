@@ -4,9 +4,9 @@ import Experience from '@/Tengine/experience';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import createDice, { initPoints, getTopface } from '@/utils/dice'
 import setOctahedron from '@/utils/setOctahedron'
+import {faceTex} from '@/components/dice/coloInfo/color'
 
 
-const topFace: any[] = []
 let flag: any = null
 export default class PhysicalWorld {
   public world: CANNON.World;
@@ -15,9 +15,10 @@ export default class PhysicalWorld {
   public debug;
   public debugFolder;
   public debugObject: any;
-
+  public topFace:any[];
 
   constructor() {
+    this.topFace = []
     this.world = new CANNON.World()
     this.world.gravity.set(0, -9.82, 0)
     this.world.allowSleep = true
@@ -31,7 +32,9 @@ export default class PhysicalWorld {
       color: '#FFFFFF',
       emissiveIntensity: 0.3,
       throwDice: () => {
-        this.experience.world.createModel(10, 8)
+        this.experience.time?.trigger('throw',null)
+        this.topFace =[]
+        this.experience.world.createModel(15, 8)
         flag = null
       }
     }
@@ -112,55 +115,9 @@ export default class PhysicalWorld {
 
   createDice(position: any) {
     //threejs
-    // const mesh = createDice()
-    // mesh.position.set(position.x, position.y, position.z)
     const geometry = createDice()
     setOctahedron(geometry)
-    const faceTex = [
-      {
-        element: "primogem",
-        color: "#38383c",
-      },
-      {
-        element: "anemo",
-        color: "#54b6a5",
-      },
-      {
-        element: "geo",
-        color: "#3c2d22",
-      },
-      {
-        element: "electro",
-        color: "#522552",
-      },
-      {
-        element: "dendro",
-        color: "#5fcc66",
-      },
-      {
-        element: "hydro",
-        color: "#24236c",
-      },
-      {
-        element: "pyro",
-        color: "#8f3e43",
-      },
-      {
-        element: "cryo",
-        color: "#95dae4",
-      }
-    ]
-    // const materials = [
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.pyroTex, color: '#c81a1a' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.anemoTex, color: '#095f44' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.cryoTex, color: '#1fbbbb' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.electroTex, color: '#871b87' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.geoTex, color: '#3f2205' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.dendroTex, color: '#118111' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.hydroTex, color: '#1818c9' }),
-    //   new THREE.MeshStandardMaterial({ map: this.experience.resource.items.primogemTex, color: '#111111' })
-    // ]
-
+    
     const materials = faceTex.map((item) => {
       const texture = this.experience.resource.items[`${item.element}Tex`]
       const textureB = this.experience.resource.items[`${item.element}TexB`]
@@ -276,9 +233,9 @@ export default class PhysicalWorld {
       if (!flag) {
         this.objectsToUpdate.forEach((item) => {
           const tmp = getTopface(item.mesh)
-          topFace.push(tmp)
+          this.topFace.push(tmp)
         })
-        console.log(topFace);
+        this.experience.time?.trigger('getResult',this.topFace)
         flag = true
       }
     }

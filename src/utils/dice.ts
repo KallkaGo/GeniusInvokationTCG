@@ -59,18 +59,26 @@ const initPoints = (mesh: THREE.Mesh) => {
 }
 
 
-const getTopface =(group:THREE.Group)=>{
-  let topFace,max =0
-  group.children.forEach((item)=>{
-    item.updateMatrixWorld() //更新模型的世界矩阵
+const getTopface = (group: THREE.Group) => {
+  let topFace, max = 0
+  group.children.forEach((item) => {
+    /* 
+    更新模型的世界矩阵,一般情况下，渲染器的 render() 方法会自动更新场景中所有物体的全局变换矩阵，
+    因此不需要显式地调用 Object3D.updateMatrixWorld() 方法。
+    但是，如果在渲染过程中发现物体的位置或方向不正确，或者需要进行拾取或碰撞检测等操作，
+    那么可能需要手动调用 updateMatrixWorld() 方法来更新物体的全局变换矩阵，
+    以确保它们能够正确地显示和交互。
+    */
+    item.updateMatrixWorld() 
     let worldPosition = new THREE.Vector3()
+    //将结果复制到worldPosition中
     item.getWorldPosition(worldPosition)
-    if(max < worldPosition.y){
+    if (max < worldPosition.y) {
       max = worldPosition.y
       topFace = item.name
     }
   })
-return topFace
+  return topFace
 }
 
 
