@@ -38,12 +38,12 @@ export default class PhysicalWorld {
         flag = null
       }
     }
-    this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value) => { this.setProperty(this.experience.scene.children, "emissive", value) })
-    this.debugFolder?.addColor(this.debugObject, 'color').onChange((value) => { this.setProperty(this.experience.scene.children, "color", value) })
-    this.debugFolder?.add(this.debugObject, 'emissiveIntensity').min(0).max(5).step(0.01).onChange((value) => { this.setProperty(this.experience.scene.children, "emissiveIntensity", value) })
+    this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value:any) => { this.setProperty(this.experience.scene.children, "emissive", value) })
+    this.debugFolder?.addColor(this.debugObject, 'color').onChange((value:any) => { this.setProperty(this.experience.scene.children, "color", value) })
+    this.debugFolder?.add(this.debugObject, 'emissiveIntensity').min(0).max(5).step(0.01).onChange((value:any) => { this.setProperty(this.experience.scene.children, "emissiveIntensity", value) })
     this.debugFolder?.add(this.debugObject, 'throwDice')
   }
-  setProperty(target: any[], arg: string, value: string) {
+  setProperty(target: any[], arg: string, value: any) {
     console.log(target);
     for (const item of target) {
       if (item.type === 'Group' && Array.isArray(item.children)) {

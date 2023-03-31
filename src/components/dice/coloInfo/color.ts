@@ -1,4 +1,4 @@
-export const enum color {
+export  enum color {
   universal="#f0ffff",
   wind="#54b6a5",
   rock ="#3c2d22",

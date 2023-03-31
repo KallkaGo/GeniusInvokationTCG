@@ -3,8 +3,6 @@ import { AudioListener, Vector3, Audio } from 'three'
 
 import Floor from "../components/floor";
 import PhyWorld from './phyworld'
-import vertexShader from './shader/vertex.glsl'
-import fragmentShader from './shader/fragment.glsl'
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";

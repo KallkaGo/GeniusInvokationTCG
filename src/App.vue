@@ -4,7 +4,7 @@
     result :
     <template v-for="(item, index) in result" :key="index">
       <div class="container">
-        <div class="icon" :style="{ backgroundColor: color[item] }"></div>
+        <div class="icon" :style="{ backgroundColor: color[item as keyof typeof color ] }"></div>
         <span>{{ item }}</span>
       </div>
     </template>
