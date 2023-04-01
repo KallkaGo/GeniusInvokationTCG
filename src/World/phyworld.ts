@@ -39,16 +39,15 @@ export default class PhysicalWorld {
       color: '#FFFFFF',
       emissiveIntensity: 0.3,
       throwDice: () => {
+        this.topFace = []
         this.experience.time?.trigger('throw', null)
         count === 0 ? this.experience.world.createModel(15, 8) : count === 2 ? this.experience.world.createModel(15, 8) : this.experience.world.createModel(15, 8 - this.lockRes.length)
+        count = count + 1
         flag = null
-        count++
-        this.topFace = []
-        if (count > 2) {
+        if (count >2 || count === 0) {
           this.lockRes = []
-          count = 0
+          count = 1
         }
-
       }
     }
     this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value: any) => { this.setProperty(this.experience.scene.children, "emissive", value) })
