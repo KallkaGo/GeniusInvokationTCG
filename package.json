@@ -4,17 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "depoly": "vercel --prod"
   },
   "dependencies": {
     "cannon-es": "^0.20.0",
     "dat.gui": "^0.7.9",
     "three": "^0.151.2",
+    "vercel": "^28.18.3",
     "vue": "^3.2.47"
   },
   "devDependencies": {
+    "@types/dat.gui": "^0.7.9",
     "@types/three": "^0.150.0",
     "@vitejs/plugin-vue": "^4.1.0",
     "typescript": "^4.9.3",

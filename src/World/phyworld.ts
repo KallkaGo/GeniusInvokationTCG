@@ -4,9 +4,10 @@ import Experience from '@/Tengine/experience';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import createDice, { initPoints, getTopface } from '@/utils/dice'
 import setOctahedron from '@/utils/setOctahedron'
-import {faceTex} from '@/components/dice/coloInfo/color'
+import { faceTex } from '@/components/dice/coloInfo/color'
+import Mouse from '@/utils/mouse';
 
-
+export let count: number = 0
 let flag: any = null
 export default class PhysicalWorld {
   public world: CANNON.World;
@@ -15,9 +16,14 @@ export default class PhysicalWorld {
   public debug;
   public debugFolder;
   public debugObject: any;
-  public topFace:any[];
+  public topFace: any[];
+  public lockRes: any[];
+  public mouse;
+
+
 
   constructor() {
+    this.lockRes = []
     this.topFace = []
     this.world = new CANNON.World()
     this.world.gravity.set(0, -9.82, 0)
@@ -25,6 +31,7 @@ export default class PhysicalWorld {
     this.experience = new Experience()
     this.objectsToUpdate = []
     this.debug = this.experience.debug
+    this.mouse = new Mouse()
     this.createPhyFloor()
     this.debugFolder = this.debug!.ui!.addFolder('Dice')
     this.debugObject = {
@@ -32,15 +39,21 @@ export default class PhysicalWorld {
       color: '#FFFFFF',
       emissiveIntensity: 0.3,
       throwDice: () => {
-        this.experience.time?.trigger('throw',null)
-        this.topFace =[]
-        this.experience.world.createModel(15, 8)
+        this.experience.time?.trigger('throw', null)
+        count === 0 ? this.experience.world.createModel(15, 8) : count === 2 ? this.experience.world.createModel(15, 8) : this.experience.world.createModel(15, 8 - this.lockRes.length)
         flag = null
+        count++
+        this.topFace = []
+        if (count > 2) {
+          this.lockRes = []
+          count = 0
+        }
+
       }
     }
-    this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value:any) => { this.setProperty(this.experience.scene.children, "emissive", value) })
-    this.debugFolder?.addColor(this.debugObject, 'color').onChange((value:any) => { this.setProperty(this.experience.scene.children, "color", value) })
-    this.debugFolder?.add(this.debugObject, 'emissiveIntensity').min(0).max(5).step(0.01).onChange((value:any) => { this.setProperty(this.experience.scene.children, "emissiveIntensity", value) })
+    this.debugFolder?.addColor(this.debugObject, 'emissive').onChange((value: any) => { this.setProperty(this.experience.scene.children, "emissive", value) })
+    this.debugFolder?.addColor(this.debugObject, 'color').onChange((value: any) => { this.setProperty(this.experience.scene.children, "color", value) })
+    this.debugFolder?.add(this.debugObject, 'emissiveIntensity').min(0).max(5).step(0.01).onChange((value: any) => { this.setProperty(this.experience.scene.children, "emissiveIntensity", value) })
     this.debugFolder?.add(this.debugObject, 'throwDice')
   }
   setProperty(target: any[], arg: string, value: any) {
@@ -117,20 +130,20 @@ export default class PhysicalWorld {
     //threejs
     const geometry = createDice()
     setOctahedron(geometry)
-    
+
     const materials = faceTex.map((item) => {
       const texture = this.experience.resource.items[`${item.element}Tex`]
       const textureB = this.experience.resource.items[`${item.element}TexB`]
       texture.magFilter = THREE.NearestFilter;
       texture.minFilter = THREE.NearestFilter;
       texture.center.set(0.5, 0.5)
-      texture.repeat.set(2, 2)
-      texture.rotation = -Math.PI / 6
+      texture.repeat.set(3, 3)
+      // texture.rotation = -Math.PI / 6
       textureB.magFilter = THREE.NearestFilter;
       textureB.minFilter = THREE.NearestFilter;
       textureB.center.set(0.5, 0.5)
       textureB.repeat.set(3, 3)
-      texture.rotation = -Math.PI / 6
+      // textureB.rotation = -Math.PI / 6
       return new THREE.MeshLambertMaterial(
         {
           map: textureB,
@@ -222,6 +235,24 @@ export default class PhysicalWorld {
     return allBodiesStopped;
   }
 
+  LockSelectDice(group: THREE.Group) {
+    let i: any;
+    for (const index in this.topFace) {
+      if (this.topFace[index].parent.uuid === group.uuid) {
+        this.lockRes.push({
+          name: this.topFace[index].name,
+          group
+        })
+        i = index
+        break
+      }
+    }
+    this.topFace.splice(<any>i, 1)
+    this.experience.time?.trigger('lockResult', this.lockRes)
+    this.experience.time?.trigger('getResult', this.topFace)
+  }
+
+
 
   update() {
     this.world.step(1 / 60, 16, 3)
@@ -233,9 +264,10 @@ export default class PhysicalWorld {
       if (!flag) {
         this.objectsToUpdate.forEach((item) => {
           const tmp = getTopface(item.mesh)
-          this.topFace.push(tmp)
+          count === 2 ? this.lockRes.push(tmp) : this.topFace.push(tmp)
+          count === 2 ? this.experience.time?.trigger('lockResult', this.lockRes) : null
         })
-        this.experience.time?.trigger('getResult',this.topFace)
+        this.experience.time?.trigger('getResult', this.topFace)
         flag = true
       }
     }

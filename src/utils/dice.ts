@@ -75,7 +75,7 @@ const getTopface = (group: THREE.Group) => {
     item.getWorldPosition(worldPosition)
     if (max < worldPosition.y) {
       max = worldPosition.y
-      topFace = item.name
+      topFace = item
     }
   })
   return topFace
