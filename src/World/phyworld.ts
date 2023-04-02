@@ -62,11 +62,9 @@ export default class PhysicalWorld {
     this.debugFolder?.add(this.debugObject, 'throwDice')
   }
   setProperty(target: any[], arg: string, value: any) {
-    console.log(target);
     for (const item of target) {
       if (item.type === 'Group' && Array.isArray(item.children)) {
         item.children.forEach((element: any) => {
-          console.log(value);
           if (element.name === 'dice') {
             element.material.forEach((item: any) => {
               const val = typeof value === 'number' ? value : new THREE.Color(value)
@@ -167,7 +165,6 @@ export default class PhysicalWorld {
     const mesh = new THREE.Mesh(geometry, materials)
     mesh.name = 'dice'
     mesh.castShadow = true
-    console.log(geometry);
     const group = initPoints(mesh)
     // mesh.position.copy(position)
     group.position.copy(position)
@@ -262,6 +259,7 @@ export default class PhysicalWorld {
 
   update() {
     this.world.step(1 / 60, 16, 3)
+    this.mouse.effectComposer.updated()
     for (const object of this.objectsToUpdate) {
       object.mesh.position.copy(object.body.position)
       object.mesh.quaternion.copy(object.body.quaternion)
