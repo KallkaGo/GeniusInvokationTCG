@@ -9,10 +9,13 @@ export default class Mouse {
   public raycaster;
   public exprience;
   public effectComposer;
+  public world;
+
   constructor() {
     this.mouse = new THREE.Vector2()
     this.exprience = new Experience()
     this.sizes = this.exprience.sizes
+    this.world = this.exprience.world
     this.raycaster = new Raycaster()
     this.effectComposer = new EffectComposerClass()
     this.getMousePosition()
@@ -34,18 +37,22 @@ export default class Mouse {
   }
 
   insertDice(outline: boolean, visible: boolean) {
-    const intersects = this.raycaster.instance.intersectObjects(this.exprience.scene.children)
-    if (intersects.length) {
-      if (intersects[0].object.parent!.name === 'dice') {
-        const selectObject = intersects[0].object.parent
-        const selectArr = []
-        selectArr.push(intersects[0].object.parent)
-        visible === true ? intersects[0].object.parent!.visible = false : null
-        visible === true ? this.LockDice(selectObject) : null
-        outline === true ? this.effectComposer.outlinePass.selectedObjects = selectArr : null
+   
+    if (this.world.physicalWorld&&this.world.physicalWorld.checkAllBodiesStopped(this.world.physicalWorld.world)) {
+      const intersects = this.raycaster.instance.intersectObjects(this.exprience.scene.children)
+      if (intersects.length) {
+        if (intersects[0].object.parent!.name === 'dice') {
+          const selectObject = intersects[0].object.parent
+          const selectArr = []
+          selectArr.push(intersects[0].object.parent)
+          visible === true ? intersects[0].object.parent!.visible = false : null
+          visible === true ? this.LockDice(selectObject) : null
+          outline === true ? this.effectComposer.outlinePass.selectedObjects = selectArr : null
 
+        }
       }
     }
+
   }
   LockDice(selectObject: any) {
     this.exprience.world.physicalWorld.LockSelectDice(selectObject)
