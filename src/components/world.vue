@@ -19,6 +19,7 @@
         </div>
       </template>
     </div>
+    <button @click="handleLockData"> Add</button>
   </div>
 </template>
 
@@ -43,7 +44,6 @@ const handleData = (...value: any[]) => {
 
 const handleLockData = (...payload: any[]) => {
   lock.value = payload
-
 }
 
 

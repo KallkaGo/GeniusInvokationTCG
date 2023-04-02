@@ -22,6 +22,7 @@ export default class PhysicalWorld {
 
 
 
+
   constructor() {
     this.lockRes = []
     this.topFace = []
@@ -33,18 +34,23 @@ export default class PhysicalWorld {
     this.debug = this.experience.debug
     this.mouse = new Mouse()
     this.createPhyFloor()
+
     this.debugFolder = this.debug!.ui!.addFolder('Dice')
     this.debugObject = {
       emissive: '#FFFFFF',
       color: '#FFFFFF',
       emissiveIntensity: 0.3,
       throwDice: () => {
+        if (this.lockRes.length === 8 && count % 2 === 1) {
+          count += 1
+          return this.lockRes
+        }
         this.topFace = []
         this.experience.time?.trigger('throw', null)
         count === 0 ? this.experience.world.createModel(15, 8) : count === 2 ? this.experience.world.createModel(15, 8) : this.experience.world.createModel(15, 8 - this.lockRes.length)
         count = count + 1
         flag = null
-        if (count >2 || count === 0) {
+        if (count > 2 || count === 0) {
           this.lockRes = []
           count = 1
         }
@@ -161,6 +167,7 @@ export default class PhysicalWorld {
     const mesh = new THREE.Mesh(geometry, materials)
     mesh.name = 'dice'
     mesh.castShadow = true
+    console.log(geometry);
     const group = initPoints(mesh)
     // mesh.position.copy(position)
     group.position.copy(position)
@@ -267,6 +274,7 @@ export default class PhysicalWorld {
           count === 2 ? this.experience.time?.trigger('lockResult', this.lockRes) : null
         })
         this.experience.time?.trigger('getResult', this.topFace)
+
         flag = true
       }
     }

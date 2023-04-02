@@ -68,7 +68,7 @@ export default class World {
       this.physicalWorld.createDice(position)
       tmp = new Vector3(x, y, z)
     }
-    if (!this.throwsound.isPlaying) {
+    if (!this.throwsound.isPlaying ) {
       this.throwsound.play()
     }
   }
