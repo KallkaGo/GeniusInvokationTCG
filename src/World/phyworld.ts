@@ -251,6 +251,7 @@ export default class PhysicalWorld {
       }
     }
     this.topFace.splice(<any>i, 1)
+    this.experience.scene.remove(group)
     this.experience.time?.trigger('lockResult', this.lockRes)
     this.experience.time?.trigger('getResult', this.topFace)
   }
