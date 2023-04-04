@@ -1,20 +1,20 @@
 <template>
   <div>
     <canvas ref="webgl"></canvas>
-    <div class="content" v-show="result.length">
+    <div id="content" v-show="result.length">
       result :
       <template v-for="(item) in result">
-        <div class="container">
-          <div class="icon" :style="{ backgroundColor: color[item.name as keyof typeof color] }"></div>
+        <div id="container">
+          <div id="icon" :style="{ backgroundColor: color[item.name as keyof typeof color] }"></div>
           <span>{{ item.name }}</span>
         </div>
       </template>
     </div>
-    <div class="lockcontent" v-show="lock.length">
+    <div id="lockcontent" v-show="lock.length">
       Lock :
       <template v-for="(item2) in lock">
-        <div class="container">
-          <div class="icon" :style="{ backgroundColor: color[item2.name as keyof typeof color] }"></div>
+        <div id="container">
+          <div id="icon" :style="{ backgroundColor: color[item2.name as keyof typeof color] }"></div>
           <span>{{ item2.name }}</span>
         </div>
       </template>
@@ -71,14 +71,14 @@ onUnmounted(() => {
 
 
 <style scoped>
-.container {
+#container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 15px;
 }
 
-.lockcontent {
+#lockcontent {
   display: flex;
   position: fixed;
   bottom: 20px;
@@ -93,7 +93,7 @@ onUnmounted(() => {
 
 
 
-.content {
+#content {
   display: flex;
   position: fixed;
   bottom: 70px;
@@ -105,7 +105,7 @@ onUnmounted(() => {
   user-select: none;
 }
 
-.icon {
+#icon {
   width: 10px;
   height: 10px;
   margin-right: 10px;

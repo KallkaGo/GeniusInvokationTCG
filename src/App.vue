@@ -32,6 +32,7 @@ onMounted(()=>{
 #element{
   font-size: 2rem;
   text-indent: 2em;
+  user-select: none;
 }
 
 </style>

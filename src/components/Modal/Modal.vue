@@ -1,14 +1,14 @@
 <template>
-  <div class="modal" v-if="showModal">
-    <div class="modal-content">
+  <div id="modal" v-if="showModal">
+    <div id="modal-content">
       <header>
-        <span class="title"> {{ title }}</span>
+        <span id="title"> {{ title }}</span>
       </header>
-      <main class="content">
+      <main id="content">
         <slot></slot>
       </main>
-      <footer class="footer">
-        <span class="play" @click="onOk">Play</span>
+      <footer id="footer">
+        <span id="play" @click="onOk">Play</span>
       </footer>
     </div>
   </div>
@@ -42,7 +42,7 @@ const onCancel = () => {
 </script>
 
 <style scoped>
-.modal {
+#modal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,7 +55,7 @@ const onCancel = () => {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+#modal-content {
   background-color: #edb9b9;
   padding: 20px;
   padding-top: 5px;
@@ -66,21 +66,21 @@ const onCancel = () => {
   overflow: auto;
 }
 
-.content {
+#content {
   height: 350px;
 }
 
-.footer {
+#footer {
   float: right;
 }
 
-.title {
+#title {
   font-size: 2rem;
   font-weight: 600;
 
 }
 
-.play {
+#play {
   font-size: 2rem;
   font-weight: 600;
   cursor: pointer;
