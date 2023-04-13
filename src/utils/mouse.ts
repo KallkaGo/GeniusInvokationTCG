@@ -37,19 +37,16 @@ export default class Mouse {
   }
 
   insertDice(outline: boolean, visible: boolean) {
-   
-    if (this.world.physicalWorld&&this.world.physicalWorld.checkAllBodiesStopped(this.world.physicalWorld.world)) {
-      const intersects = this.raycaster.instance.intersectObjects(this.exprience.scene.children)
-      if (intersects.length) {
-        if (intersects[0].object.parent!.name === 'dice') {
-          const selectObject = intersects[0].object.parent
-          const selectArr = []
-          selectArr.push(intersects[0].object.parent)
-          visible === true ? intersects[0].object.parent!.visible = false : null
-          visible === true ? this.LockDice(selectObject) : null
-          outline === true ? this.effectComposer.outlinePass.selectedObjects = selectArr : null
 
-        }
+    if (this.world.physicalWorld && this.world.physicalWorld.checkAllBodiesStopped(this.world.physicalWorld.world)) {
+      const intersects = this.raycaster.instance.intersectObjects(this.exprience.scene.children)
+      if (intersects.length && intersects[0].object.parent!.name === 'dice') {
+        const selectObject = intersects[0].object.parent
+        const selectArr = []
+        selectArr.push(intersects[0].object.parent)
+        visible === true ? intersects[0].object.parent!.visible = false : null
+        visible === true ? this.LockDice(selectObject) : null
+        outline === true ? this.effectComposer.outlinePass.selectedObjects = selectArr : null
       }
     }
 
