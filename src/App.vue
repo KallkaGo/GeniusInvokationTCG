@@ -1,13 +1,12 @@
 <template>
   <div>
-    <World/>
-    <Modal title="help" visible >
+    <World />
+    <Modal title="help" visible>
       <div>
-       <p id="element"></p>
+        <p id="element"></p>
       </div>
     </Modal>
   </div>
-  
 </template>
 
 <script setup lang="ts">
@@ -18,21 +17,20 @@ import Typed from 'typed.js';
 import caption from '@/components/captions/captions'
 
 
-onMounted(()=>{
+onMounted(() => {
   new Typed('#element', {
-      strings: [caption],
-      cursorChar: '',
-      typeSpeed: 50,
-    });
+    strings: [caption],
+    cursorChar: '',
+    typeSpeed: 50,
+  });
 })
 
 </script>
 
 <style scoped>
-#element{
+#element {
   font-size: 2rem;
   text-indent: 2em;
   user-select: none;
 }
-
 </style>

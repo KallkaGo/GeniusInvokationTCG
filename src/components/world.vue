@@ -65,6 +65,7 @@ onUnmounted(() => {
     result.value = [];
     count === 2 ? lock.value = [] : null
   });
+  experience.value.dispose()
 })
 </script>
 

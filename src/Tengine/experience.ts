@@ -1,4 +1,5 @@
-import { Scene, AmbientLight, Light, SpotLight, Vector3 } from 'three'
+import { Scene, AmbientLight, Light, SpotLight, Vector3, Mesh } from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Sizes from './sizes'
 import Time from './time'
 import Camera from './camera';
@@ -17,7 +18,7 @@ export default class Experience {
   public time;
   public camera;
   public scene!: Scene;
-  public control!: any;
+  public control!: Control;
   public render;
   public world?: any;
   public ambient!: Light;
@@ -66,7 +67,7 @@ export default class Experience {
   }
   setLight() {
     this.ambient = new AmbientLight(0x666666)
-    this.spotLight = new SpotLight(0xffffff,0.5,5000)
+    this.spotLight = new SpotLight(0xffffff, 0.5, 5000)
     this.spotLight.position.set(20, 200, 0)
     this.spotLight.castShadow = true
     this.spotLight.shadow.mapSize.width = 2048
@@ -85,6 +86,27 @@ export default class Experience {
     this.control?.updated()
     this.render?.update()
   }
+  dispose() {
+    this.sizes?.off('resize')
+    this.time?.off('tick')
+    /* 销毁场景里的几何体 材质等 */
+    this.scene.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.geometry.dispose()
+        for (const key of child.material) {
+          const value = child.material[key]
+          if (value && value.dispose === 'funciton') {
+            value.dispose()
+          }
+        }
+      }
+    })
+
+    /* 销毁轨道控制器 */
+    this.control.instance.dispose()
+
+  }
+
 }
 
 
