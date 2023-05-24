@@ -95,7 +95,7 @@ export default class Experience {
         child.geometry.dispose()
         for (const key of child.material) {
           const value = child.material[key]
-          if (value && value.dispose === 'funciton') {
+          if (value && typeof value.dispose === 'function') {
             value.dispose()
           }
         }
