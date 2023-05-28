@@ -1,4 +1,3 @@
 # GeniusInvokationTCG
 GeniusInvokationTCG by threejs
-
-demourl
+仿原神七圣召唤
