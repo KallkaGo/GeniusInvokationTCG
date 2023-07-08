@@ -42,7 +42,11 @@ const createBasicMesh = (position: Array<number>, name: string) => {
   return mesh
 }
 
-
+/* 
+将骰子的8面的结果映射到8个粒子上 
+和dice加入到一个group里 让整个group做自由落体运动
+这样子只需要获取y值最高的那个粒子即可拿到最顶上那面的结果
+*/
 const initPoints = (mesh: THREE.Mesh) => {
   const group = new THREE.Group()
   group.add(mesh)
