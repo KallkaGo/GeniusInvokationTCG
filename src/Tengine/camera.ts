@@ -1,7 +1,7 @@
 import Experience from "./experience";
 import { Scene, PerspectiveCamera } from 'three'
 
-export default class Camera {
+export default class Camera  {
   public experience;
   public sizes;
   public scene: Scene
