@@ -1,9 +1,9 @@
 import { BufferGeometry, Material, Mesh, BoxGeometry, MeshPhongMaterial } from 'three'
 
 export default class Floor {
-  public geometry!: BufferGeometry;
-  public material!: Material;
-  public mesh!: Mesh;
+  public geometry: BufferGeometry;
+  public material: Material;
+  public mesh: Mesh;
   constructor() {
     this.geometry = new BoxGeometry(200, 100)
     this.material = new MeshPhongMaterial({

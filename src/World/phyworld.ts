@@ -7,6 +7,8 @@ import setOctahedron from '@/utils/setOctahedron'
 import { faceTex } from '@/components/dice/coloInfo/color'
 import Mouse from '@/utils/mouse';
 
+
+
 export let count: number = 0
 let flag: any = null
 export default class PhysicalWorld {
