@@ -20,10 +20,10 @@ export default class Experience {
   public scene!: Scene;
   public control!: Control;
   public render;
-  public world?: any;
+  public world!: World;
   public ambient!: Light;
   public spotLight!: Light;
-  public resource?: any;
+  public resource!:Resource;
   public debug;
   constructor(canvas?: HTMLCanvasElement) {
 

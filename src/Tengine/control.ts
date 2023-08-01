@@ -1,13 +1,14 @@
 import Experience from "./experience";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import Camera from './camera';
 export default class Control {
   public instance!: OrbitControls;
-  public camera:any;
+  public camera:Camera;
   public experience;
   public canvas;
   constructor() {
     this.experience = new Experience()
-    this.camera = this.experience.camera
+    this.camera = this.experience.camera!
     this.canvas = this.experience.canvas
     this.setOrbitControls()
 
